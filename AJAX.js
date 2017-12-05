@@ -6,7 +6,7 @@ AJAX = {
 			return text;
 		}
 	},
-	QS: function(p) {
+	queryString: function(p) {
 		var esc = encodeURIComponent;
 		return Object.keys(p)
 			.map(function(k) {
@@ -14,33 +14,40 @@ AJAX = {
 			})
 			.join('&');
 	},
-	base: function(f) {
+	// base: function(f) {
+	// 	var xhr = new XMLHttpRequest();
+	// 	xhr.addEventListener('load', function(p) {
+	// 		if (f) f(AJAX.parse(xhr.responseText));
+	// 	});
+	// 	return xhr;
+	// },
+	GET: function(url, f) {
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('load', function(p) {
 			if (f) f(AJAX.parse(xhr.responseText));
 		});
-		return xhr;
-	},
-	GET: function(url, f) {
-		var xhr = AJAX.base(f);
 		xhr.open("GET", url, true);
 		xhr.send();
 		return xhr;
 	},
 	POST: function(url, data, f) {
-		var xhr = AJAX.base(f);
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener('load', function(p) {
+			if (f) f(AJAX.parse(xhr.responseText));
+		});
 		xhr.open("POST", url, true);
-		data = AJAX.QS(data);
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.send(data);
+		xhr.send(AJAX.queryString(data));
 		return xhr;
 	},
 	PUT: function(url, data, f) {
-		var xhr = AJAX.base(f);
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener('load', function(p) {
+			if (f) f(AJAX.parse(xhr.responseText));
+		});
 		xhr.open("PUT", url, true);
-		data = AJAX.QS(data);
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.send(data);
+		xhr.send(AJAX.queryString(data));
 		return xhr;
 	}
 }
